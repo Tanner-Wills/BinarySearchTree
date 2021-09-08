@@ -1,13 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * Your implementation of a BST.
+ * implementation of a BST.
  */
 public class BST<T extends Comparable<? super T>> {
 
-    /*
-     * Do not add new instance variables or modify existing ones.
-     */
     private BSTNode<T> root;
     private int size;
 
@@ -18,23 +17,29 @@ public class BST<T extends Comparable<? super T>> {
     /**
      * Adds the data to the tree.
      *
-     * This must be done recursively.
-     *
-     * The new data should become a leaf in the tree.
-     *
-     * Traverse the tree to find the appropriate location. If the data is
-     * already in the tree, then nothing should be done (the duplicate
-     * shouldn't get added, and size should not be incremented).
-     *
      * Should be O(log n) for best and average cases and O(n) for worst case.
-     *
-     * @param data The data to add to the tree.
-     * @throws java.lang.IllegalArgumentException If data is null.
      */
     public void add(T data) {
-        // WRITE YOUR CODE HERE (DO NOT MODIFY METHOD HEADER)!
+        if(data == null){
+            throw new IllegalArgumentException("Can't add null data to the Tree!");
+        } else {
+            root = rAdd(root, data);
+        }
     }
 
+    private BSTNode<T> rAdd(BSTNode<T> curr, T data){
+        if(curr == null){
+            size ++;
+            curr = new BSTNode<T>(data);
+
+        } else if (curr.getData().compareTo(data) > 0){
+            curr.setLeft(rAdd(curr.getLeft(), data));
+
+        } else if (curr.getData().compareTo(data) < 0){
+            curr.setRight(rAdd(curr.getRight(), data));
+        }
+        return curr;
+    }
     /**
      * Removes and returns the data from the tree matching the given parameter.
      *
@@ -64,31 +69,60 @@ public class BST<T extends Comparable<? super T>> {
      */
     public T remove(T data) {
         // WRITE YOUR CODE HERE (DO NOT MODIFY METHOD HEADER)!
+        return data;
     }
 
     /**
      * Returns the root of the tree.
-     *
-     * For grading purposes only. You shouldn't need to use this method since
-     * you have direct access to the variable.
-     *
-     * @return The root of the tree
      */
     public BSTNode<T> getRoot() {
-        // DO NOT MODIFY THIS METHOD!
         return root;
     }
 
     /**
      * Returns the size of the tree.
-     *
-     * For grading purposes only. You shouldn't need to use this method since
-     * you have direct access to the variable.
-     *
-     * @return The size of the tree
      */
     public int size() {
-        // DO NOT MODIFY THIS METHOD!
         return size;
+    }
+
+
+
+
+    /**
+     * Pre Order Traversal
+     */
+    public List<T> preorder(BSTNode<T> root) {
+        // C,L,R
+
+        List<T> returnVals = new ArrayList<T>();
+        if (baseCase(root) == true){
+            returnVals.add(root.getData());
+        }
+        else {
+            List<T> leftVals = new ArrayList<T>();
+            List<T> rightVals = new ArrayList<T>();
+            if(root.getLeft() != null){
+                leftVals = preorder(root.getLeft());
+            }
+            if(root.getRight() != null){
+                rightVals = preorder(root.getRight());
+            }
+
+            returnVals.add(root.getData());
+            returnVals.addAll(leftVals);
+            returnVals.addAll(rightVals);
+        }
+        return returnVals;
+    }
+    /**
+     * Base Case Helper Method
+     */
+    private boolean baseCase(BSTNode<T> root){
+        if(root != null){
+            if (root.getLeft() == null && root.getRight() == null)
+                return true;
+        }
+        return false;
     }
 }
