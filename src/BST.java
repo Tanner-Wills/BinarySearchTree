@@ -71,11 +71,12 @@ public class BST<T extends Comparable<? super T>> {
         if(data == null){
             throw new IllegalArgumentException("Can't remove null data from the Tree!");
         } else {
-            root = rRemove(root, data, );
+            BSTNode<T> removeNode = null;
+            root = rRemove(root, data, removeNode);
         }
         return data;
     }
-    private BSTNode<T> rRemove(BSTNode<T> curr, T data, BSTNode<T> remove){
+    private BSTNode<T> rRemove(BSTNode<T> curr, T data, BSTNode<T> removeNode){
         /**
          * traverse down the tree looking for the specified data.
          * Case 1: data not found -> do nothing. Print "Data not in Tree!"
@@ -83,14 +84,53 @@ public class BST<T extends Comparable<? super T>> {
          * Case 3: data has one child -> grandparent.setNext(child)
          * Case 4: data has two children -> replace the node using the successor method. Need a successor helper method.
          */
-        // Case 1
+
+        // Case 1: data not found
+        if (curr == null) {
+            System.out.println("Data not in Tree!");
+
+            // Base case: curr == data
+        } else if(curr == data){
+            // set removeNode == curr.data
+            removeNode.setData(curr.getData());
+
+            // Case 2: if data is a leaf
+            if(curr.getRight() == null && curr.getLeft() == null) {
+                curr = null;
+
+            // Case 3: if data has one child
+            } else if (curr.getLeft() == null){
+                if(curr.getRight() != null){
+                    curr.setData(curr.getRight().getData());
+                    curr.setRight(null);
+                }
+            } else if (curr.getRight() == null){
+                if(curr.getLeft() != null){
+                    curr.setData(curr.getLeft().getData());
+                    curr.setLeft(null);
+                }
+            }
+
+            // Case 4: if data has two children. Replace node using successor helper method.
+            else if (curr.getRight() != null && curr.getLeft() != null){
+
+            }
+
+            size --;
+            return curr;
 
 
+          // continue to traverse through tree
+        } else if (curr.getData().compareTo(data) > 0){
+            curr.setLeft(rRemove(curr.getLeft(), data, removeNode));
 
-
-
-
+        } else if (curr.getData().compareTo(data) < 0){
+            curr.setRight(rRemove(curr.getRight(), data, removeNode));
+        }
+        return removeNode;
     }
+
+
 
     /**
      * Returns the root of the tree.
