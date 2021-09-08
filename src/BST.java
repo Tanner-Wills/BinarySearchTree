@@ -68,8 +68,28 @@ public class BST<T extends Comparable<? super T>> {
      * @throws java.util.NoSuchElementException   If the data is not in the tree.
      */
     public T remove(T data) {
-        // WRITE YOUR CODE HERE (DO NOT MODIFY METHOD HEADER)!
+        if(data == null){
+            throw new IllegalArgumentException("Can't remove null data from the Tree!");
+        } else {
+            root = rRemove(root, data, );
+        }
         return data;
+    }
+    private BSTNode<T> rRemove(BSTNode<T> curr, T data, BSTNode<T> remove){
+        /**
+         * traverse down the tree looking for the specified data.
+         * Case 1: data not found -> do nothing. Print "Data not in Tree!"
+         * Case 2: data is a leaf node -> simply remove it
+         * Case 3: data has one child -> grandparent.setNext(child)
+         * Case 4: data has two children -> replace the node using the successor method. Need a successor helper method.
+         */
+        // Case 1
+
+
+
+
+
+
     }
 
     /**
