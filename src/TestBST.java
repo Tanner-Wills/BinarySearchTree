@@ -31,8 +31,11 @@ public class TestBST {
         misty.add(10);
         misty.add(75);
         misty.add(100);
+        misty.add(25);
 
         System.out.println(misty.preorder(misty.getRoot()));
+        misty.remove(25);
 
+        System.out.println(misty.preorder(misty.getRoot()));
     }
 }

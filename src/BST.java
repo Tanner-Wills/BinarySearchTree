@@ -113,10 +113,19 @@ public class BST<T extends Comparable<? super T>> {
 
             // Case 4: if data has two children. Replace node using successor helper method.
             else if (curr.getRight() != null && curr.getLeft() != null){
+                //save right side tree
+                BSTNode<T> rightNode = successor(curr.getRight());
 
+                //save left side tree
+                BSTNode<T> leftNode = curr.getLeft();
+
+                curr.setData(successValue(curr));
+                curr.setLeft(leftNode);
+                curr.setRight(rightNode);
             }
 
             size --;
+            System.out.println("Removed Node: " + removeNode.getData());
             return curr;
 
 
@@ -129,7 +138,33 @@ public class BST<T extends Comparable<? super T>> {
         }
         return removeNode;
     }
+    private BSTNode<T> successor(BSTNode<T> curr){
+        //traverse left until null is reached.
+        //base case
+        if(curr.getLeft() == null){
 
+            // Case 1: if successor node is a leaf
+            if(curr.getRight() == null){
+                curr = null;
+            // Case 2: successor has a child node
+            } else {
+                curr.setData(curr.getRight().getData());
+                curr.setRight(null);
+            }
+
+        } else {
+            curr.setLeft(successor(curr.getLeft()));
+        }
+        return curr;
+    }
+
+    private T successValue(BSTNode<T> curr){
+        curr = curr.getRight();
+        while(curr.getLeft() != null){
+            curr = curr.getLeft();
+        }
+        return curr.getData();
+    }
 
 
     /**
@@ -145,9 +180,6 @@ public class BST<T extends Comparable<? super T>> {
     public int size() {
         return size;
     }
-
-
-
 
     /**
      * Pre Order Traversal
