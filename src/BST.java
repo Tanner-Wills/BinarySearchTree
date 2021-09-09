@@ -72,10 +72,12 @@ public class BST<T extends Comparable<? super T>> {
             throw new IllegalArgumentException("Can't remove null data from the Tree!");
         } else {
             BSTNode<T> removeNode = null;
-            root = rRemove(root, data, removeNode);
+            rRemove(root, data, removeNode);
         }
         return data;
     }
+
+    // Helper method to handle various cases for removing a node from the tree.
     private BSTNode<T> rRemove(BSTNode<T> curr, T data, BSTNode<T> removeNode){
         /**
          * traverse down the tree looking for the specified data.
@@ -90,22 +92,29 @@ public class BST<T extends Comparable<? super T>> {
             System.out.println("Data not in Tree!");
 
             // Base case: curr == data
-        } else if(curr == data){
+        } else if(curr.getData().equals(data)){
             // set removeNode == curr.data
-            removeNode.setData(curr.getData());
 
             // Case 2: if data is a leaf
             if(curr.getRight() == null && curr.getLeft() == null) {
+                removeNode = curr;
+                removeNode.setData(curr.getData());
                 curr = null;
 
             // Case 3: if data has one child
             } else if (curr.getLeft() == null){
                 if(curr.getRight() != null){
+                    removeNode = curr;
+                    removeNode.setData(curr.getRight().getData());
+
                     curr.setData(curr.getRight().getData());
                     curr.setRight(null);
                 }
             } else if (curr.getRight() == null){
                 if(curr.getLeft() != null){
+                    removeNode = curr;
+                    removeNode.setData(curr.getLeft().getData());
+
                     curr.setData(curr.getLeft().getData());
                     curr.setLeft(null);
                 }
@@ -113,21 +122,21 @@ public class BST<T extends Comparable<? super T>> {
 
             // Case 4: if data has two children. Replace node using successor helper method.
             else if (curr.getRight() != null && curr.getLeft() != null){
+                removeNode = curr;
+                removeNode.setData(curr.getData());
+
+                curr.setData(successValue(curr.getRight()));
+
                 //save right side tree
                 BSTNode<T> rightNode = successor(curr.getRight());
 
                 //save left side tree
                 BSTNode<T> leftNode = curr.getLeft();
-
-                curr.setData(successValue(curr));
                 curr.setLeft(leftNode);
                 curr.setRight(rightNode);
             }
-
             size --;
-            System.out.println("Removed Node: " + removeNode.getData());
             return curr;
-
 
           // continue to traverse through tree
         } else if (curr.getData().compareTo(data) > 0){
@@ -136,8 +145,10 @@ public class BST<T extends Comparable<? super T>> {
         } else if (curr.getData().compareTo(data) < 0){
             curr.setRight(rRemove(curr.getRight(), data, removeNode));
         }
-        return removeNode;
+        return curr;
     }
+
+    // Helper method for getting the new tree after removing the successor node.
     private BSTNode<T> successor(BSTNode<T> curr){
         //traverse left until null is reached.
         //base case
@@ -158,14 +169,14 @@ public class BST<T extends Comparable<? super T>> {
         return curr;
     }
 
-    private T successValue(BSTNode<T> curr){
-        curr = curr.getRight();
+    // Helper method for getting value of successor node
+    private T successValue(BSTNode<T> curr) {
         while(curr.getLeft() != null){
             curr = curr.getLeft();
         }
+        System.out.println("Success value: " + curr.getData());
         return curr.getData();
     }
-
 
     /**
      * Returns the root of the tree.
