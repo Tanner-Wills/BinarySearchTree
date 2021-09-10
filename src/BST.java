@@ -42,31 +42,8 @@ public class BST<T extends Comparable<? super T>> {
     }
     /**
      * Removes and returns the data from the tree matching the given parameter.
-     *
-     * This must be done recursively.
-     *
-     * There are 3 cases to consider:
-     * 1: The node containing the data is a leaf (no children). In this case,
-     * simply remove it.
-     * 2: The node containing the data has one child. In this case, simply
-     * replace it with its child.
-     * 3: The node containing the data has 2 children. Use the SUCCESSOR to
-     * replace the data. You should use recursion to find and remove the
-     * successor (you will likely need an additional helper method to
-     * handle this case efficiently).
-     *
-     * Do NOT return the same data that was passed in. Return the data that
-     * was stored in the tree.
-     *
-     * Hint: Should you use value equality or reference equality?
-     *
-     * Must be O(log n) for best and average cases and O(n) for worst case.
-     *
-     * @param data The data to remove.
-     * @return The data that was removed.
-     * @throws java.lang.IllegalArgumentException If data is null.
-     * @throws java.util.NoSuchElementException   If the data is not in the tree.
      */
+    // Wrapper Method
     public T remove(T data) {
         if(data == null){
             throw new IllegalArgumentException("Can't remove null data from the Tree!");
@@ -77,7 +54,7 @@ public class BST<T extends Comparable<? super T>> {
         return data;
     }
 
-    // Helper method to handle various cases for removing a node from the tree.
+    // Main Method
     private BSTNode<T> rRemove(BSTNode<T> curr, T data, BSTNode<T> removeNode){
         /**
          * traverse down the tree looking for the specified data.
@@ -93,37 +70,22 @@ public class BST<T extends Comparable<? super T>> {
 
             // Base case: curr == data
         } else if(curr.getData().equals(data)){
-            // set removeNode == curr.data
 
             // Case 2: if data is a leaf
             if(curr.getRight() == null && curr.getLeft() == null) {
-                removeNode = curr;
-                removeNode.setData(curr.getData());
-                curr = null;
+               curr = null;
 
             // Case 3: if data has one child
             } else if (curr.getLeft() == null){
-                if(curr.getRight() != null){
-                    removeNode = curr;
-                    removeNode.setData(curr.getRight().getData());
+                if(curr.getRight() != null)
+                    curr = curr.getRight();
 
-                    curr.setData(curr.getRight().getData());
-                    curr.setRight(null);
-                }
-            } else if (curr.getRight() == null){
-                if(curr.getLeft() != null){
-                    removeNode = curr;
-                    removeNode.setData(curr.getLeft().getData());
+            } else if (curr.getRight() == null) {
+                if (curr.getLeft() != null)
+                    curr = curr.getLeft();
 
-                    curr.setData(curr.getLeft().getData());
-                    curr.setLeft(null);
-                }
-            }
-
-            // Case 4: if data has two children. Replace node using successor helper method.
-            else if (curr.getRight() != null && curr.getLeft() != null){
-                removeNode = curr;
-                removeNode.setData(curr.getData());
+                // Case 4: if data has two children. Replace node using successor helper method.
+            } else if (curr.getRight() != null && curr.getLeft() != null) {
 
                 curr.setData(successValue(curr.getRight()));
 
@@ -155,25 +117,23 @@ public class BST<T extends Comparable<? super T>> {
         if(curr.getLeft() == null){
 
             // Case 1: if successor node is a leaf
-            if(curr.getRight() == null){
+            if(curr.getRight() == null)
                 curr = null;
             // Case 2: successor has a child node
-            } else {
-                curr.setData(curr.getRight().getData());
-                curr.setRight(null);
-            }
+            else
+                curr = curr.getRight();
 
-        } else {
+        } else
             curr.setLeft(successor(curr.getLeft()));
-        }
+
         return curr;
     }
 
     // Helper method for getting value of successor node
     private T successValue(BSTNode<T> curr) {
-        while(curr.getLeft() != null){
+        while(curr.getLeft() != null)
             curr = curr.getLeft();
-        }
+
         System.out.println("Success value: " + curr.getData());
         return curr.getData();
     }
