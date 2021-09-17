@@ -105,5 +105,41 @@ public class BST<T extends Comparable<? super T>> {
         // DO NOT MODIFY THIS METHOD!
         return size;
     }
+
+    /**
+     * Pre Order Traversal
+     */
+    public List<T> preorder(BSTNode<T> root) {
+        // C,L,R
+
+        List<T> returnVals = new ArrayList<T>();
+        if (baseCase(root) == true){
+            returnVals.add(root.getData());
+        }
+        else {
+            List<T> leftVals = new ArrayList<T>();
+            List<T> rightVals = new ArrayList<T>();
+            if(root.getLeft() != null){
+                leftVals = preorder(root.getLeft());
+            }
+            if(root.getRight() != null){
+                rightVals = preorder(root.getRight());
+            }
+
+            returnVals.add(root.getData());
+            returnVals.addAll(leftVals);
+            returnVals.addAll(rightVals);
+        }
+        return returnVals;
+    }
+    /**
+     * Base Case Helper Method
+     */
+    private boolean baseCase(BSTNode<T> root){
+        if(root != null){
+            if (root.getLeft() == null && root.getRight() == null)
+                return true;
+        }
+        return false;
+    }
 }
-*/
